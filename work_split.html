@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: Arial, sans-serif; color: #222; padding: 48px; max-width: 900px; margin: auto; }
+
+  h1 { color: #fff; background: #0d7377; padding: 32px; border-radius: 8px; text-align: center; font-size: 28px; }
+  h1 span { display: block; font-size: 14px; font-weight: normal; margin-top: 8px; color: #b2dfdb; }
+
+  h2 { color: #0d7377; border-left: 4px solid #14a085; padding-left: 12px; margin: 32px 0 12px; font-size: 18px; }
+  h3 { color: #444; margin: 20px 0 8px; font-size: 15px; }
+
+  p { margin: 8px 0; font-size: 14px; line-height: 1.6; }
+
+  table { width: 100%; border-collapse: collapse; margin: 12px 0 20px; font-size: 13px; }
+  th { background: #0d7377; color: #fff; padding: 10px 14px; text-align: left; }
+  td { padding: 9px 14px; border-bottom: 1px solid #e0e0e0; }
+  tr:nth-child(even) td { background: #f5fafa; }
+
+  .person-block { border: 1px solid #14a085; border-radius: 8px; padding: 20px; margin: 16px 0; }
+  .person-block.koushik { border-color: #0d7377; }
+  .person-block.siri { border-color: #14a085; }
+  .person-label { display: inline-block; background: #0d7377; color: #fff; padding: 3px 14px; border-radius: 20px; font-size: 13px; font-weight: bold; margin-bottom: 12px; }
+  .person-label.siri { background: #14a085; }
+
+  pre { background: #f4f4f4; border-radius: 6px; padding: 16px; font-size: 12px; line-height: 1.8; overflow-x: auto; margin: 12px 0; }
+
+  .tag { display: inline-block; background: #e0f2f1; color: #0d7377; border-radius: 4px; padding: 2px 8px; font-size: 12px; margin: 2px; }
+
+  .note { background: #e8f5e9; border-left: 4px solid #14a085; padding: 12px 16px; border-radius: 4px; font-size: 13px; margin: 16px 0; }
+
+  @media print {
+    body { padding: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<h1>AgentForge — Work Split
+  <span>Koushik &amp; Siri | Dynamic AI Agent Builder Platform</span>
+</h1>
+
+<h2>Koushik — The Orchestration Layer</h2>
+<div class="person-block koushik">
+  <span class="person-label">Koushik</span>
+  <p>Owns the <strong>brain</strong> of the system — the parts that receive user input and coordinate all other agents.</p>
+
+  <h3>Agents</h3>
+  <table>
+    <tr><th>Agent</th><th>What It Does</th></tr>
+    <tr><td>Agent Builder Agent</td><td>Main orchestrator — receives user request, calls all other agents in sequence</td></tr>
+    <tr><td>Goal Analysis Agent</td><td>Parses user intent, extracts objective, frequency, and output type</td></tr>
+    <tr><td>Validation Agent</td><td>Checks the final generated agent for correctness before deployment</td></tr>
+  </table>
+
+  <h3>Other Responsibilities</h3>
+  <span class="tag">FastAPI backend</span>
+  <span class="tag">Azure Container Apps deployment</span>
+  <span class="tag">Agent creation form (Frontend)</span>
+
+  <h3>Learning Focus</h3>
+  <p>How to build an <strong>orchestrator</strong> — a LangGraph agent that calls other agents as tools. The most advanced and most important pattern in the system.</p>
+</div>
+
+<h2>Siri — The Specialist Agents Layer</h2>
+<div class="person-block siri">
+  <span class="person-label siri">Siri</span>
+  <p>Owns all the agents that do the <strong>actual specialized work</strong> when called by the orchestrator.</p>
+
+  <h3>Agents</h3>
+  <table>
+    <tr><th>Agent</th><th>What It Does</th></tr>
+    <tr><td>Tool Selection Agent</td><td>Picks the right tools (Gmail API, Search, AWS, etc.) for the generated agent</td></tr>
+    <tr><td>Workflow Design Agent</td><td>Builds the step-by-step execution graph using LangGraph</td></tr>
+    <tr><td>Prompt Generation Agent</td><td>Writes the system prompt and role instructions for the generated agent</td></tr>
+    <tr><td>Memory Configuration Agent</td><td>Decides what the agent should remember across runs</td></tr>
+  </table>
+
+  <h3>Other Responsibilities</h3>
+  <span class="tag">PostgreSQL schema (Neon)</span>
+  <span class="tag">pgvector memory setup</span>
+  <span class="tag">Supabase Auth integration</span>
+  <span class="tag">Agent dashboard (Frontend)</span>
+
+  <h3>Learning Focus</h3>
+  <p>How to build <strong>specialist agents</strong> — focused, single-purpose LangGraph nodes that take structured input and return structured output.</p>
+</div>
+
+<h2>Shared Responsibilities</h2>
+<table>
+  <tr><th>Task</th><th>Who</th></tr>
+  <tr><td>GitHub repo creation</td><td>Koushik creates — Siri clones</td></tr>
+  <tr><td>Code reviews</td><td>Each reviews the other's PRs before merge</td></tr>
+  <tr><td>React frontend</td><td>Koushik: Create Agent page &nbsp;|&nbsp; Siri: Dashboard &amp; Workflow viewer</td></tr>
+</table>
+
+<h2>File Ownership Map</h2>
+<pre>
+AgentForge/
+├── backend/
+│   ├── agents/
+│   │   ├── agent_builder.py        ← Koushik
+│   │   ├── goal_analysis.py        ← Koushik
+│   │   ├── validation.py           ← Koushik
+│   │   ├── tool_selection.py       ← Siri
+│   │   ├── workflow_design.py      ← Siri
+│   │   ├── prompt_generation.py    ← Siri
+│   │   └── memory_config.py        ← Siri
+│   ├── main.py                     ← Koushik (FastAPI)
+│   └── database/
+│       └── schema.sql              ← Siri
+├── frontend/
+│   ├── src/pages/CreateAgent/      ← Koushik
+│   └── src/pages/Dashboard/        ← Siri
+</pre>
+
+<h2>Daily Git Workflow (Both Follow This)</h2>
+<pre>
+# Start of every session
+git pull
+
+# While working — commit often
+git add .
+git commit -m "feat: describe what you just built"
+
+# End of session
+git push
+</pre>
+
+<div class="note">
+  Since each person owns different files, you will almost never have a merge conflict. Both push directly to <strong>main</strong>.
+</div>
+
+</body>
+</html>
