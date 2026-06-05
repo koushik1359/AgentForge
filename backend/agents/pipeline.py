@@ -5,6 +5,7 @@ from agents.goal_analysis import analyze_goal
 from agents.tool_selection import select_tools
 from agents.prompt_generation import generate_prompt
 from agents.workflow_design import design_workflow
+from agents.memory_config import configure_memory
 
 load_dotenv()
 
@@ -15,12 +16,14 @@ def build_graph():
     graph.add_node("select_tools", select_tools)
     graph.add_node("generate_prompt", generate_prompt)
     graph.add_node("design_workflow", design_workflow)
+    graph.add_node("configure_memory", configure_memory)
 
     graph.set_entry_point("analyze_goal")
     graph.add_edge("analyze_goal", "select_tools")
     graph.add_edge("select_tools", "generate_prompt")
     graph.add_edge("generate_prompt", "design_workflow")
-    graph.add_edge("design_workflow", END)
+    graph.add_edge("design_workflow", "configure_memory")
+    graph.add_edge("configure_memory", END)
 
     return graph.compile()
 
@@ -35,7 +38,8 @@ if __name__ == "__main__":
         "tools_needed": [],
         "tool_configurations": [],
         "system_prompt": "",
-        "workflow_steps": []
+        "workflow_steps": [],
+        "memory_config": {}
     })
 
     print("\n--- Goal Analysis ---")
@@ -58,3 +62,13 @@ if __name__ == "__main__":
         print(f"\n  Step {step['step_number']}: {step['name']}")
         print(f"  What:  {step['description']}")
         print(f"  Tool:  {step['tool']}")
+    
+
+    print("\n--- Memory Configuration ---")
+    print(f"\n  Storage: {result['memory_config']['storage_type']}")
+    print("\n  Short-term memory:")
+    for item in result["memory_config"]["short_term"]:
+        print(f"    - {item['key']}: {item['description']} ({item['retention_days']} days)")
+    print("\n  Long-term memory:")
+    for item in result["memory_config"]["long_term"]:
+        print(f"    - {item['key']}: {item['description']} ({item['retention_days']} days)")

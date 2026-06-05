@@ -9,3 +9,4 @@ class GoalState(TypedDict):
     tool_configurations: list[dict]
     system_prompt: str
     workflow_steps: list[dict]
+    memory_config: dict
