@@ -8,3 +8,4 @@ class GoalState(TypedDict):
     tools_needed: list[str]
     tool_configurations: list[dict]
     system_prompt: str
+    workflow_steps: list[dict]

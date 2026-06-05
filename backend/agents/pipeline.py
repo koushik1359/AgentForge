@@ -4,6 +4,7 @@ from agents.state import GoalState
 from agents.goal_analysis import analyze_goal
 from agents.tool_selection import select_tools
 from agents.prompt_generation import generate_prompt
+from agents.workflow_design import design_workflow
 
 load_dotenv()
 
@@ -13,11 +14,13 @@ def build_graph():
     graph.add_node("analyze_goal", analyze_goal)
     graph.add_node("select_tools", select_tools)
     graph.add_node("generate_prompt", generate_prompt)
+    graph.add_node("design_workflow", design_workflow)
 
     graph.set_entry_point("analyze_goal")
     graph.add_edge("analyze_goal", "select_tools")
     graph.add_edge("select_tools", "generate_prompt")
-    graph.add_edge("generate_prompt", END)
+    graph.add_edge("generate_prompt", "design_workflow")
+    graph.add_edge("design_workflow", END)
 
     return graph.compile()
 
@@ -31,7 +34,8 @@ if __name__ == "__main__":
         "output_type": "",
         "tools_needed": [],
         "tool_configurations": [],
-        "system_prompt": ""
+        "system_prompt": "",
+        "workflow_steps": []
     })
 
     print("\n--- Goal Analysis ---")
@@ -48,3 +52,9 @@ if __name__ == "__main__":
 
     print("\n--- Generated System Prompt ---")
     print(result["system_prompt"])
+
+    print("\n--- Workflow Design ---")
+    for step in result["workflow_steps"]:
+        print(f"\n  Step {step['step_number']}: {step['name']}")
+        print(f"  What:  {step['description']}")
+        print(f"  Tool:  {step['tool']}")
