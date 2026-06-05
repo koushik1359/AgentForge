@@ -6,8 +6,15 @@ from agents.tool_selection import select_tools
 from agents.prompt_generation import generate_prompt
 from agents.workflow_design import design_workflow
 from agents.memory_config import configure_memory
+from agents.validation import validate_agent
 
 load_dotenv()
+
+def route_after_validation(state: GoalState) -> str:
+    if state["validation_result"]["passed"]:
+        return "approved"
+    else:
+        return "rejected"
 
 def build_graph():
     graph = StateGraph(GoalState)
@@ -17,13 +24,22 @@ def build_graph():
     graph.add_node("generate_prompt", generate_prompt)
     graph.add_node("design_workflow", design_workflow)
     graph.add_node("configure_memory", configure_memory)
+    graph.add_node("validate_agent", validate_agent)
 
     graph.set_entry_point("analyze_goal")
     graph.add_edge("analyze_goal", "select_tools")
     graph.add_edge("select_tools", "generate_prompt")
     graph.add_edge("generate_prompt", "design_workflow")
     graph.add_edge("design_workflow", "configure_memory")
-    graph.add_edge("configure_memory", END)
+    graph.add_edge("configure_memory", "validate_agent")
+    graph.add_conditional_edges(
+        "validate_agent",
+        route_after_validation,
+        {
+            "approved": END,
+            "rejected": END
+        }
+    )
 
     return graph.compile()
 
@@ -39,7 +55,8 @@ if __name__ == "__main__":
         "tool_configurations": [],
         "system_prompt": "",
         "workflow_steps": [],
-        "memory_config": {}
+        "memory_config": {},
+        "validation_result": {}
     })
 
     print("\n--- Goal Analysis ---")
@@ -72,3 +89,18 @@ if __name__ == "__main__":
     print("\n  Long-term memory:")
     for item in result["memory_config"]["long_term"]:
         print(f"    - {item['key']}: {item['description']} ({item['retention_days']} days)")
+
+
+    print("\n--- Validation ---")
+    v = result["validation_result"]
+    status = "PASSED" if v["passed"] else "FAILED"
+    print(f"\n  Status: {status}")
+    print(f"  Score:  {v['score']}/100")
+    if v["issues"]:
+        print("\n  Issues:")
+        for issue in v["issues"]:
+            print(f"    - {issue}")
+    if v["recommendations"]:
+        print("\n  Recommendations:")
+        for rec in v["recommendations"]:
+            print(f"    - {rec}")

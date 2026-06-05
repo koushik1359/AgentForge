@@ -10,3 +10,4 @@ class GoalState(TypedDict):
     system_prompt: str
     workflow_steps: list[dict]
     memory_config: dict
+    validation_result: dict
