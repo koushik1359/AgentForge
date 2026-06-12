@@ -1,0 +1,88 @@
+Enter your agent idea: 
+--- Goal Analysis ---
+Goal:       python -m agents.pipeline > demo_output.txt
+Frequency:  on-demand
+Output:     structured response
+Tools:      ['input_analyzer', 'task_planner', 'response_generator']
+
+--- Tool Configurations ---
+
+  Tool:    input_analyzer
+  Purpose: handle input analyzer related operations for the agent goal.
+  Config:  {'mode': 'mock', 'requires_api_key': False, 'timeout_seconds': 30, 'retry_count': 2}
+
+  Tool:    task_planner
+  Purpose: handle task planner related operations for the agent goal.
+  Config:  {'mode': 'mock', 'requires_api_key': False, 'timeout_seconds': 30, 'retry_count': 2}
+
+  Tool:    response_generator
+  Purpose: handle response generator related operations for the agent goal.
+  Config:  {'mode': 'mock', 'requires_api_key': False, 'timeout_seconds': 30, 'retry_count': 2}
+
+--- Generated System Prompt ---
+You are a specialized AI agent created by AgentForge.
+
+Your goal:
+python -m agents.pipeline > demo_output.txt
+
+Execution frequency:
+on-demand
+
+Expected output type:
+structured response
+
+Available tools:
+- input_analyzer: handle input analyzer related operations for the agent goal.
+- task_planner: handle task planner related operations for the agent goal.
+- response_generator: handle response generator related operations for the agent goal.
+
+Operating instructions:
+1. Understand the user's request clearly before acting.
+2. Use the available tools only when they are relevant to the goal.
+3. Produce a clear, useful, and well-structured final output.
+4. Keep the response professional, concise, and practical.
+5. If required information is missing, state the assumption clearly instead of failing silently.
+
+This is running in mock mode, so tool behavior is simulated and no external API key is required.
+
+--- Workflow Design ---
+
+  Step 1: Understand User Objective
+  What:  Read the user request and identify the main goal: python -m agents.pipeline > demo_output.txt
+  Tool:  internal_reasoning
+
+  Step 2: Use input_analyzer
+  What:  Use input_analyzer to handle input analyzer related operations for the agent goal.
+  Tool:  input_analyzer
+
+  Step 3: Use response_generator
+  What:  Use response_generator to handle response generator related operations for the agent goal.
+  Tool:  response_generator
+
+  Step 4: Use task_planner
+  What:  Use task_planner to handle task planner related operations for the agent goal.
+  Tool:  task_planner
+
+  Step 5: Generate Final Output
+  What:  Prepare the final response in the required output format.
+  Tool:  response_generator
+
+--- Memory Configuration ---
+
+  Storage: postgresql
+
+  Short-term memory:
+    - current_user_request: Stores the current user request during one execution of the agent. (1 days)
+    - intermediate_results: Stores temporary outputs from workflow steps before final response generation. (1 days)
+
+  Long-term memory:
+    - successful_workflows: Stores successful workflow patterns for improving future agent runs. (30 days)
+    - user_output_preferences: Stores stable user preferences about response format and output style. (90 days)
+
+--- Validation ---
+
+  Status: PASSED
+  Score:  90/100
+
+  Recommendations:
+    - Mock validation passed. Real LLM validation can be enabled later with OPENAI_API_KEY.

@@ -1,8 +1,11 @@
 from __future__ import annotations
 
 import os
+from dotenv import load_dotenv
 
 from agents.state import GoalState
+
+load_dotenv()
 
 
 def _mock_enabled() -> bool:
